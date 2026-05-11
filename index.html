@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio | CS Projects</title>
+  <meta name="description" content="A student portfolio showcasing creative web and Python projects built during class." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ──────────────────────────────────────────── */
+    :root {
+      --bg:         #0d0f1a;
+      --surface:    #13172a;
+      --surface2:   #1a1f38;
+      --border:     rgba(138, 110, 255, 0.18);
+      --accent:     #7c5cfc;
+      --accent2:    #a78bfa;
+      --accent-glo: rgba(124, 92, 252, 0.35);
+      --text:       #e2e8f0;
+      --muted:      #94a3b8;
+      --radius:     18px;
+      --shadow:     0 8px 32px rgba(0,0,0,0.55);
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED BACKGROUND ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(124,92,252,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(99,179,237,0.07) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ──────────────────────────────────────────── */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── SIDEBAR – PROFILE ──────────────────────────────── */
+    .profile-sidebar {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      position: sticky;
+      top: 48px;
+    }
+
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle inner glow */
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, var(--accent-glo) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 140px; height: 140px;
+    }
+    .avatar-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--accent), var(--accent2), var(--accent));
+      z-index: -1;
+      animation: spin-ring 6s linear infinite;
+    }
+    @keyframes spin-ring {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 4px solid var(--bg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      text-align: center;
+      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .profile-info {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      transition: border-color 0.25s;
+    }
+    .info-item:hover { border-color: var(--accent); }
+
+    .info-item .label {
+      color: var(--accent2);
+      font-weight: 600;
+      min-width: 52px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-top: 1px;
+    }
+    .info-item .value { color: var(--text); }
+
+    .class-badge {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(124,92,252,0.25), rgba(167,139,250,0.15));
+      border: 1px solid rgba(124,92,252,0.4);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+    }
+    .class-badge .badge-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent2);
+      margin-bottom: 4px;
+    }
+    .class-badge .badge-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────────────── */
+    .main-content {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e2e8f0 40%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    /* ── PROJECT SECTION ─────────────────────────────────── */
+    .project-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-section:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(124,92,252,0.2);
+    }
+    .project-section::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .project-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .project-title span {
+      color: var(--accent2);
+      margin-right: 8px;
+    }
+
+    /* ── IMAGE CAROUSEL ──────────────────────────────────── */
+    .carousel-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 0;
+      border-radius: 12px;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
+
+    /* Prev / Next arrows */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(13,15,26,0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      z-index: 10;
+    }
+    .carousel-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-btn.prev { left: 12px; }
+    .carousel-btn.next { right: 12px; }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
+    /* ── PROJECT DESCRIPTION ─────────────────────────────── */
+    .project-desc {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    /* ── VISIT BUTTON ────────────────────────────────────── */
+    .btn-visit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(124,92,252,0.4);
+      align-self: flex-start;
+    }
+    .btn-visit:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(124,92,252,0.55);
+    }
+    .btn-visit svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .footer {
+      grid-column: 1 / 3;
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .page-wrapper {
+        grid-template-columns: 1fr;
+        padding: 28px 20px 60px;
+        gap: 28px;
+      }
+      .profile-sidebar {
+        grid-column: 1;
+        grid-row: 1;
+        position: static;
+      }
+      .main-content {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .footer { grid-column: 1; }
+      .profile-card { flex-direction: row; align-items: flex-start; flex-wrap: wrap; }
+      .avatar-wrap { width: 100px; height: 100px; flex-shrink: 0; }
+      .avatar { width: 100px; height: 100px; }
+    }
+
+    @media (max-width: 560px) {
+      .project-section { padding: 24px 18px; }
+      .carousel-slide img { height: 220px; }
+      .section-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="profile-sidebar" aria-label="Profile">
+      <div class="profile-card">
+        <div class="avatar-wrap">
+          <img src="imgs/profile.png" alt="Profile photo" class="avatar" id="profileAvatar" />
+        </div>
+
+        <p class="profile-name">Your Name Here</p>
+
+        <div class="profile-info">
+          <div class="info-item">
+            <span class="label">Major</span>
+            <span class="value">Computer Science</span>
+          </div>
+          <div class="info-item">
+            <span class="label">School</span>
+            <span class="value">Your University</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Year</span>
+            <span class="value">Sophomore &mdash; Spring 2026</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Email</span>
+            <span class="value">you@email.com</span>
+          </div>
+        </div>
+
+        <div class="class-badge">
+          <span class="badge-label">Current Class</span>
+          <span class="badge-value">Introduction to Python Programming</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="main-content" aria-label="Projects">
+      <div class="section-header">
+        <h1 class="section-title">My Projects</h1>
+        <div class="section-line" aria-hidden="true"></div>
+      </div>
+
+      <!-- ── PROJECT 1 ── -->
+      <section class="project-section" aria-labelledby="proj1-title">
+        <h2 class="project-title" id="proj1-title"><span>01</span>Data Analytics Dashboard</h2>
+
+        <!-- Carousel -->
+        <div class="carousel-wrap">
+          <div class="carousel" id="carousel1" role="list" aria-label="Project 1 images">
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project1.png" alt="Dashboard overview screenshot" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project2.png" alt="Dashboard detail view" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project3.png" alt="Dashboard mobile view" loading="lazy" />
+            </div>
+          </div>
+          <button class="carousel-btn prev" id="p1-prev" aria-label="Previous image">&#8592;</button>
+          <button class="carousel-btn next" id="p1-next" aria-label="Next image">&#8594;</button>
+        </div>
+        <div class="carousel-dots" id="dots1" aria-label="Image indicators"></div>
+
+        <p class="project-desc">
+          A fully interactive data analytics dashboard built with Python and Matplotlib. This project visualizes
+          real-world datasets and allows users to filter, sort, and explore trends through dynamic charts and graphs.
+          It demonstrates proficiency in data manipulation, visualization libraries, and clean UI design principles.
+        </p>
+
+        <a href="#" class="btn-visit" id="visit-proj1" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Visit Project
+        </a>
+      </section>
+
+      <!-- ── PROJECT 2 ── -->
+      <section class="project-section" aria-labelledby="proj2-title">
+        <h2 class="project-title" id="proj2-title"><span>02</span>E-Commerce Web App</h2>
+
+        <div class="carousel-wrap">
+          <div class="carousel" id="carousel2" role="list" aria-label="Project 2 images">
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project2.png" alt="E-commerce homepage" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project1.png" alt="Product page" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project3.png" alt="Shopping cart" loading="lazy" />
+            </div>
+          </div>
+          <button class="carousel-btn prev" id="p2-prev" aria-label="Previous image">&#8592;</button>
+          <button class="carousel-btn next" id="p2-next" aria-label="Next image">&#8594;</button>
+        </div>
+        <div class="carousel-dots" id="dots2" aria-label="Image indicators"></div>
+
+        <p class="project-desc">
+          A full-stack e-commerce web application built using Flask and SQLite as the backend database. Users can
+          browse a product catalog, add items to a cart, and complete a simulated checkout process. The project
+          covers key concepts including RESTful routing, session management, and database CRUD operations.
+        </p>
+
+        <a href="#" class="btn-visit" id="visit-proj2" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Visit Project
+        </a>
+      </section>
+
+      <!-- ── PROJECT 3 ── -->
+      <section class="project-section" aria-labelledby="proj3-title">
+        <h2 class="project-title" id="proj3-title"><span>03</span>Task Manager App</h2>
+
+        <div class="carousel-wrap">
+          <div class="carousel" id="carousel3" role="list" aria-label="Project 3 images">
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project3.png" alt="Task manager main view" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project1.png" alt="Task categories view" loading="lazy" />
+            </div>
+            <div class="carousel-slide" role="listitem">
+              <img src="imgs/project2.png" alt="Task detail view" loading="lazy" />
+            </div>
+          </div>
+          <button class="carousel-btn prev" id="p3-prev" aria-label="Previous image">&#8592;</button>
+          <button class="carousel-btn next" id="p3-next" aria-label="Next image">&#8594;</button>
+        </div>
+        <div class="carousel-dots" id="dots3" aria-label="Image indicators"></div>
+
+        <p class="project-desc">
+          A command-line and GUI-based task management application developed in Python using the Tkinter library.
+          Users can create, categorize, prioritize, and track the completion of their daily tasks. The project
+          highlights object-oriented programming, file I/O for data persistence, and event-driven GUI design.
+        </p>
+
+        <a href="#" class="btn-visit" id="visit-proj3" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Visit Project
+        </a>
+      </section>
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+      <p>&copy; 2026 &mdash; Built with passion &amp; Python &nbsp;&#128013;</p>
+    </footer>
+
+  </div>
+
+  <!-- ── CAROUSEL SCRIPT ── -->
+  <script>
+    function initCarousel(carouselId, prevBtnId, nextBtnId, dotsId) {
+      const carousel = document.getElementById(carouselId);
+      const prevBtn  = document.getElementById(prevBtnId);
+      const nextBtn  = document.getElementById(nextBtnId);
+      const dotsWrap = document.getElementById(dotsId);
+      const slides   = carousel.querySelectorAll('.carousel-slide');
+      let current    = 0;
+
+      // Build dots
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to image ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+      });
+
+      function updateDots() {
+        dotsWrap.querySelectorAll('.dot').forEach((d, i) =>
+          d.classList.toggle('active', i === current)
+        );
+      }
+
+      function goTo(index) {
+        current = (index + slides.length) % slides.length;
+        carousel.scrollTo({ left: current * carousel.offsetWidth, behavior: 'smooth' });
+        updateDots();
+      }
+
+      prevBtn.addEventListener('click', () => goTo(current - 1));
+      nextBtn.addEventListener('click', () => goTo(current + 1));
+
+      // Sync dots with native scroll (swipe on mobile)
+      carousel.addEventListener('scroll', () => {
+        const idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+        if (idx !== current) { current = idx; updateDots(); }
+      }, { passive: true });
+    }
+
+    initCarousel('carousel1', 'p1-prev', 'p1-next', 'dots1');
+    initCarousel('carousel2', 'p2-prev', 'p2-next', 'dots2');
+    initCarousel('carousel3', 'p3-prev', 'p3-next', 'dots3');
+  </script>
+
+</body>
+</html>
